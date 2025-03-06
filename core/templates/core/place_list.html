@@ -11,6 +11,9 @@
 {% block content %}
     <h1>Poop 'n Peruse</h1>
     <h2>for when you gotta go or you gotta know</h2>
+    <h2>Click on a place to get started</h2>
+    <h2>Want to add a new place? <a href="{% url 'core:place_add' %}">Click
+            Here</a></h2>
     <div id="map"></div>
     <script>
         var map = L.map('map').setView([39, -77], 10);
@@ -24,6 +27,7 @@
                     lat: {{ place.lat }},
                     lng: {{ place.long }},
                     url: "{% url 'core:place_detail' place.id %}",
+                    del_url: "{% url 'core:place_delete' place.id %}",
                     name: "{{ place.name }}"
                 },
             {% endfor %}
@@ -31,7 +35,14 @@
 
         places.forEach(function(place) {
             var marker = L.marker([place.lat, place.lng]).addTo(map);
-            var popupContent = '<a href="' + place.url + '">' + place.name + '</a>';
+            var popupContent = `
+                <a href="${place.url}"> 
+                ${place.name} 
+                </a>
+                <a href="${place.del_url}">
+                (delete)
+                </a>
+                `;
             marker.bindPopup(popupContent);
         });
     </script>

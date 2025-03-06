@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block head_content %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 500px; width: 100%; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<h1>Add a new place.</h1>
+<p>Type a name for the place here, then click on the map below to place your pin.</p>
+    <form method="post">
+            {% csrf_token %}
+        <label for="name">Place Name:</label>
+        <input type="text" id="name" name="name" value="{{ form.name.value|default:'' }}" required>
+
+        <input type="text" id="lat" name="lat" value="{{ form.lat.value|default:'' }}" required hidden>
+
+        <input type="text" id="long" name="long" value="{{ form.long.value|default:'' }}" required hidden>
+
+        <button type="submit">Save Place</button>
+    </form>
+    <div id="map"></div>
+
+    <script>
+        var map = L.map('map').setView([39, -77], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker;
+
+        function updateMarker(lat, lng) {
+            if (marker) {
+                marker.setLatLng([lat, lng]);
+            } else {
+                marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+                marker.on('dragend', function(e) {
+                    var position = marker.getLatLng();
+                    document.getElementById('lat').value = position.lat;
+                    document.getElementById('long').value = position.lng;
+                });
+            }
+            document.getElementById('lat').value = lat;
+            document.getElementById('long').value = lng;
+        }
+
+        map.on('click', function(e) {
+            updateMarker(e.latlng.lat, e.latlng.lng);
+        });
+
+        {% if form.lat.value and form.long.value %}
+            updateMarker({{ form.lat.value }}, {{ form.long.value }});
+            map.setView([{{ form.lat.value }}, {{ form.long.value }}], 10);
+        {% endif %}
+    </script>
+{% endblock %}
