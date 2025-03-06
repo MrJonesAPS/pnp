@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h1>{{ place.name }} has {{ place.password_set |length}} passwords</h1>
+<p>Click on a password below to view comments<p>
+<p>(the count of comments doesn't work yet)</p>
+<ul>
+    {% for p in place.password_set.all %}
+    <li><a href="{% url 'core:password_detail' p.id %}">
+            {{ p.value }} ({{ p.comment_set|length}} comments)
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'core:index' %}">Back</a>
+{% endblock %}
