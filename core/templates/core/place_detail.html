@@ -2,17 +2,26 @@
 
 {% block content %}
 
-
-<h1>{{ place.name }} has {{ place.password_set |length}} passwords</h1>
+{% if place.password_set.all|length > 0 %}
+<h1>{{ place.name }} has {{ place.password_set.all |length}} passwords</h1>
 <p>Click on a password below to view comments<p>
-<p>(the count of comments doesn't work yet)</p>
-<ul>
+<table>
+    <tr>
+        <th>Type</th><th>Password</th><th>Top Comment</th><th>All Comments</th>
+    </tr>
     {% for p in place.password_set.all %}
-    <li><a href="{% url 'core:password_detail' p.id %}">
-            {{ p.value }} ({{ p.comment_set|length}} comments)
-        </a>
-    </li>
+    <tr>
+        <td>{{ p.password_type.name }}</td>
+        <td>{{ p.value }}</td>
+        <td>"{{ p.comment_set.first.text}}"</td>
+        <td><a href="{% url 'core:password_detail' p.id %}">
+             (Read all {{ p.comment_set.all|length}} comments)
+        </a></td>
+    </tr>
     {% endfor %}
+</table>
 </ul>
+{% endif %}
+<a href="{% url 'core:add_password' place.id %}">Submit a new password</a>
 <a href="{% url 'core:index' %}">Back</a>
 {% endblock %}
