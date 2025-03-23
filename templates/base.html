@@ -10,6 +10,22 @@
 {% endblock %}
 </head>
 <body>
+    <header>
+        {% if user.is_authenticated %}
+            <p>Hi {{ user.username }}! 
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <button type="submit">Log Out</button>
+                </form>
+            </p>
+        {% else %}
+        <p>Not Logged In
+            <a href="{% url 'login' %}?next={{ request.path }}">(Login)</a>
+        </p>
+        {% endif %}
+    </header>
+</hr>
     {% block content %}
 
 
