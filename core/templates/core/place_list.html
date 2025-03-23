@@ -33,6 +33,7 @@
                     lat: {{ place.lat }},
                     lng: {{ place.long }},
                     url: "{% url 'core:place_detail' place.id %}",
+                    edit_url: "{% url 'core:place_update' place.id %}",
                     del_url: "{% url 'core:place_delete' place.id %}",
                     name: "{{ place.name }}"
                 },
@@ -44,6 +45,9 @@
             var popupContent = `
                 <a href="${place.url}"> 
                 ${place.name} 
+                </a>
+                <a href="${place.edit_url}">
+                (edit)
                 </a>
                 <a href="${place.del_url}">
                 (delete)

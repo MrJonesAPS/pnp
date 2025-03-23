@@ -7,21 +7,33 @@
 <p>Click on a password below to view comments<p>
 <table>
     <tr>
-        <th>Type</th><th>Password</th><th>Top Comment</th><th>All Comments</th>
+        <th>Type</th><th>Password</th><th>Top Comment</th><th>All Comments</th><th>Edit</th><th>Delete</th>
     </tr>
     {% for p in place.password_set.all %}
     <tr>
         <td>{{ p.password_type.name }}</td>
         <td>{{ p.value }}</td>
         <td>"{{ p.comment_set.first.text}}"</td>
-        <td><a href="{% url 'core:password_detail' p.id %}">
-             (Read all {{ p.comment_set.all|length}} comments)
-        </a></td>
+        <td>
+            <a href="{% url 'core:password_detail' p.id %}">
+             (Read all {{ p.comment_set.all|length}} comment{{ p.comment_set.all|pluralize }})
+            </a>
+        </td>
+        <td>
+            <a href="{% url 'core:password_update' p.id %}">
+                (edit)
+            </a>
+        </td>
+        <td>
+            <a href="{% url 'core:password_delete' p.id %}">
+                (delete)
+            </a>
+        </td>
     </tr>
     {% endfor %}
 </table>
 </ul>
 {% endif %}
-<a href="{% url 'core:add_password' place.id %}">Submit a new password</a>
+<a href="{% url 'core:password_add' place.id %}">Submit a new password</a> | 
 <a href="{% url 'core:index' %}">Back</a>
 {% endblock %}
