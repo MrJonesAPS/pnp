@@ -2,14 +2,12 @@
 
 {% block content %}
 
-<h1>Logging In</h1>
-<form method="post" action="{% url 'login' %}">
+<h1>Register A New User</h1>
+<form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Confirm">
+    <input type="submit" value="Register">
     <input type="hidden" name="next" value="{{ next }}">
 </form>
-
-<a href="{{ next }}">Back</a>
 
 {% endblock %}

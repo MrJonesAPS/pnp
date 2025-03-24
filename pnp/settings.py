@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+
 
 # Application definition
 
@@ -37,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core'
+    'core',
+    'django.contrib.sites',  # Required by django-allauth
+    'allauth',
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'pnp.urls'
@@ -55,7 +61,7 @@ ROOT_URLCONF = 'pnp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "core/templates", BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR / "templates", BASE_DIR / "core/templates", ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,3 +132,29 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+######
+#
+# Django Allauth settings
+#
+######
+
+# Account Settings
+ACCOUNT_AUTHENTICATED_REDIRECT_URL = '/'  # Redirect after login
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'none' #'mandatory'  # Require email verification for account activation
+ACCOUNT_UNIQUE_EMAIL = True  # Ensure each email is unique
+
+# Login settings
+LOGIN_REDIRECT_URL = '/'  # Redirect to home page after login
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # Redirect to home page after logout
+
+# Optional: Disable social authentication if you don't need it
+SOCIALACCOUNT_ENABLED = False  # Disable social login (OAuth)
+
+# Password reset settings (optional)
+ACCOUNT_PASSWORD_RESET_TIMEOUT = 60 * 60  # 1 hour timeout for password reset links
+
+# In settings.py, use the console email backend for development
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

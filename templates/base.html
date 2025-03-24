@@ -13,7 +13,7 @@
     <header>
         {% if user.is_authenticated %}
             <p>Hi {{ user.username }}! 
-                <form action="{% url 'logout' %}" method="post">
+                <form action="{% url 'account_logout' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
                     <button type="submit">Log Out</button>
@@ -21,7 +21,7 @@
             </p>
         {% else %}
         <p>Not Logged In
-            <a href="{% url 'login' %}?next={{ request.path }}">(Login)</a>
+            <a href="{% url 'account_login' %}?next={{ request.path }}">(Login)</a>
         </p>
         {% endif %}
     </header>
