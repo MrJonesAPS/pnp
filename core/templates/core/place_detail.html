@@ -2,38 +2,49 @@
 
 {% block content %}
 
-{% if place.password_set.all|length > 0 %}
-<h1>{{ place.name }} has {{ place.password_set.all |length}} passwords</h1>
+{% if place.code_set.all|length > 0 %}
+<h1>{{ place.name }} has {{ place.code_set.all |length}} password{{ p.code_set.all|pluralize }}</h1>
 <p>Click on a password below to view comments<p>
 <table>
     <tr>
-        <th>Type</th><th>Password</th><th>Top Comment</th><th>All Comments</th><th>Edit</th><th>Delete</th>
+        <th>Type</th>
+        <th>Password</th>
+        <th>Submitted By</th>
+        <th>Top Comment</th>
+        <th>All Comments</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
-    {% for p in place.password_set.all %}
+    {% for p in place.code_set.all %}
     <tr>
-        <td>{{ p.password_type.name }}</td>
+        <td>{{ p.code_type.name }}</td>
         <td>{{ p.value }}</td>
+        <td>{{ p.owner.username }}</td>
         <td>"{{ p.comment_set.first.text}}"</td>
         <td>
-            <a href="{% url 'core:password_detail' p.id %}">
+            <a href="{% url 'core:code_detail' p.id %}">
              (Read all {{ p.comment_set.all|length}} comment{{ p.comment_set.all|pluralize }})
             </a>
         </td>
         <td>
-            <a href="{% url 'core:password_update' p.id %}">
+            {% if user.is_authenticated and user.id == p.owner.id %}
+            <a href="{% url 'core:code_update' p.id %}">
                 (edit)
             </a>
+            {% endif %}
         </td>
         <td>
-            <a href="{% url 'core:password_delete' p.id %}">
+            {% if user.is_authenticated and user.id == p.owner.id %}
+            <a href="{% url 'core:code_delete' p.id %}">
                 (delete)
             </a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
 </table>
 </ul>
 {% endif %}
-<a href="{% url 'core:password_add' place.id %}">Submit a new password</a> | 
+<a href="{% url 'core:code_add' place.id %}">Submit a new password</a> | 
 <a href="{% url 'core:index' %}">Back</a>
 {% endblock %}

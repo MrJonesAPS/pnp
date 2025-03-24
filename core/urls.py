@@ -19,18 +19,18 @@ urlpatterns = [
 
     #Password CRUD
     path(
-        "password/<int:pk>/", views.PasswordDetailView.as_view(), name="password_detail"
+        "code/<int:pk>/", views.CodeDetailView.as_view(), name="code_detail"
     ),
     path(
-        "password/add/<int:pk>/",
-        views.PasswordAddView.as_view(),
-        name="password_add",
+        "code/add/<int:pk>/",
+        views.CodeAddView.as_view(),
+        name="code_add",
     ),
     path(
-        "password/update/<int:pk>/", views.PasswordUpdateView.as_view(), name="password_update"
+        "code/update/<int:pk>/", views.CodeUpdateView.as_view(), name="code_update"
     ),
     path(
-        "password/delete/<int:pk>/", views.PasswordDeleteView.as_view(), name="password_delete"
+        "code/delete/<int:pk>/", views.CodeDeleteView.as_view(), name="code_delete"
     ),
 
     #Comment CRUD

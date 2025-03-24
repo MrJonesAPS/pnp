@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<h1>{{ code.value }} has {{ code.comment_set.all|length}} comment{{ code.comment_set.all|pluralize }}</h1>
+
+<table>
+<tr>
+    <th>Comment</th>
+    <th>Submitted By</th>
+    <th>Edit</th><th>Delete</th>
+</tr>
+    {% for c in code.comment_set.all %}
+    <tr>
+    <td>
+            {{ c.text }}
+    </td>
+    <td>
+        {{ c.owner.username }}
+    </td>
+    <td>
+        {% if user.is_authenticated and user.id == c.owner.id %}
+        <a href="{% url 'core:comment_update' c.id %}">
+            (edit)
+        </a>
+        {% endif %}
+    </td>
+    <td>
+        {% if user.is_authenticated and user.id == c.owner.id %}
+        <a href="{% url 'core:comment_delete' c.id %}">
+            (delete)
+        </a>
+        {% endif %}
+    </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'core:comment_add' code.id %}">Submit a new Comment for this password</a> | 
+<a href="{% url 'core:place_detail' code.place.id %}">Back</a>
+{% endblock %}

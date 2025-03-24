@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views import generic
-from .models import Place, Password, Comment
+from .models import Place, Code, Comment
 from django.urls import reverse, reverse_lazy
+from core.owner import OwnerCreateView, OwnerDeleteView, OwnerDetailView, OwnerListView, OwnerDeleteView, OwnerUpdateView
 
 
 # Create your views here.
@@ -18,44 +19,44 @@ class PlaceIndexView(generic.ListView):
 class PlaceDetailView(generic.DetailView):
     model = Place
 
-class PlaceCreateView(generic.edit.CreateView):
+class PlaceCreateView(OwnerCreateView):
     model = Place
-    fields = "__all__"
+    fields = ['name','long','lat']
     success_url = reverse_lazy("core:index")
 
 
-class PlaceUpdateView(generic.edit.UpdateView):
+class PlaceUpdateView(OwnerUpdateView):
     model = Place
-    fields = "__all__"
+    fields = ['name','long','lat']
     success_url = reverse_lazy("core:index")
 
-class PlaceDeleteView(generic.edit.DeleteView):
+class PlaceDeleteView(OwnerDeleteView):
     model = Place
     success_url = reverse_lazy("core:index")
 
 ########
-# Passwords
+# Codes
 ########
-class PasswordDetailView(generic.DetailView):
-    model = Password
+class CodeDetailView(generic.DetailView):
+    model = Code
 
 
-class PasswordAddView(generic.CreateView):
-    model = Password
-    fields = "__all__"
+class CodeAddView(OwnerCreateView):
+    model = Code
+    fields = ['value','code_type','place']
 
     def get_success_url(self):
         return reverse_lazy("core:place_detail", kwargs={"pk": self.object.place.id})
 
-class PasswordUpdateView(generic.edit.UpdateView):
-    model = Password
-    fields = "__all__"
+class CodeUpdateView(OwnerUpdateView):
+    model = Code
+    fields = ['value','code_type','place']
     
     def get_success_url(self):
         return reverse_lazy("core:place_detail", kwargs={"pk": self.object.place.id})
 
-class PasswordDeleteView(generic.edit.DeleteView):
-    model = Password
+class CodeDeleteView(OwnerDeleteView):
+    model = Code
     
     def get_success_url(self):
         return reverse_lazy("core:place_detail", kwargs={"pk": self.object.place.id})
@@ -66,22 +67,22 @@ class PasswordDeleteView(generic.edit.DeleteView):
 ########
 
 
-class CommentAddView(generic.CreateView):
+class CommentAddView(OwnerCreateView):
     model = Comment
-    fields = "__all__"
+    fields = ['text','code']
 
     def get_success_url(self):
-        return reverse_lazy("core:password_detail", kwargs={"pk": self.object.password.id})
+        return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
 
-class CommentUpdateView(generic.edit.UpdateView):
+class CommentUpdateView(OwnerUpdateView):
     model = Comment
-    fields = "__all__"
+    fields = ['text','code']
     
     def get_success_url(self):
-        return reverse_lazy("core:password_detail", kwargs={"pk": self.object.password.id})
+        return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
 
-class CommentDeleteView(generic.edit.DeleteView):
+class CommentDeleteView(OwnerDeleteView):
     model = Comment
     
     def get_success_url(self):
-        return reverse_lazy("core:password_detail", kwargs={"pk": self.object.password.id})
+        return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
