@@ -43,17 +43,23 @@ class CodeDetailView(generic.DetailView):
 
 class CodeAddView(OwnerCreateView):
     model = Code
-    fields = ['value','code_type','place']
+    fields = ['value','code_type']
 
     def get_success_url(self):
         return reverse_lazy("core:place_detail", kwargs={"pk": self.object.place.id})
+
+    def form_valid(self, form):
+        form.instance.place_id = self.kwargs.get('pk')
+        return super(CodeAddView, self).form_valid(form)
 
 class CodeUpdateView(OwnerUpdateView):
     model = Code
-    fields = ['value','code_type','place']
+    fields = ['value','code_type']
     
     def get_success_url(self):
         return reverse_lazy("core:place_detail", kwargs={"pk": self.object.place.id})
+    
+    #we don't need to do the form_valid thing here. It'll just keep the existing foreign key id
 
 class CodeDeleteView(OwnerDeleteView):
     model = Code
@@ -69,17 +75,23 @@ class CodeDeleteView(OwnerDeleteView):
 
 class CommentAddView(OwnerCreateView):
     model = Comment
-    fields = ['text','code']
+    fields = ['text']
 
     def get_success_url(self):
         return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
+
+    def form_valid(self, form):
+        form.instance.code_id = self.kwargs.get('pk')
+        return super(CommentAddView, self).form_valid(form)
+
 
 class CommentUpdateView(OwnerUpdateView):
     model = Comment
-    fields = ['text','code']
+    fields = ['text']
     
     def get_success_url(self):
         return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
+
 
 class CommentDeleteView(OwnerDeleteView):
     model = Comment
