@@ -2,50 +2,47 @@
 
 {% block content %}
 
-{% if place.code_set.all|length > 0 %}
-<h1>{{ place.name }} has {{ place.code_set.all |length}} password{{ p.code_set.all|pluralize }}</h1>
-<p>Click on a password below to view comments<p>
 
-<h2>Restroom Door Lock Codes</h2>
-
-<div class="card-container">
-    {% for p in place.code_set.all %}
-    {% if p.code_type.id == 1 %}
-    <div class="card">
-
-
-    {{ p.value }}
-    <hr>
-    <a href="{% url 'core:code_detail' p.id %}">
-    ({{ p.comment_set.all|length}} comment{{ p.comment_set.all|pluralize }})
-    </a>
-
-    {% if user.is_authenticated and user.id == p.owner.id %}
-    <hr>
-    <a href="{% url 'core:code_update' p.id %}">
-        (edit)
-    </a> 
-    |
-    <a href="{% url 'core:code_delete' p.id %}">
-        (delete)
-    </a>
-    {% else %}
-    <p>Submitted by <a href="{% url 'core:user_detail' p.owner.id %}">{{ p.owner.username }}</a></p>
-    {% endif %}
-
-    </div>
-    {% endif %}
-    {% endfor %}
-
-</div>
+<h1>{{ profile_user.username }}</h1>
+<p>{{ profile_user.code_set.all | length }} Codes, {{ profile_user.comment_set.all | length }} Comments</p>
 
 <h2>Wifi Passwords</h2>
 
 <div class="card-container">
-    {% for p in place.code_set.all %}
+    {% for p in profile_user.code_set.all %}
     {% if p.code_type.id == 2 %}
     <div class="card">
 
+
+    {{ p.place.name }}
+    <hr>
+    <a href="{% url 'core:code_detail' p.id %}">
+    ({{ p.comment_set.all|length}} comment{{ p.comment_set.all|pluralize }})
+    </a>
+
+    {% if user.is_authenticated and user.id == p.owner.id %}
+    <hr>
+    <a href="{% url 'core:code_update' p.id %}">
+        (edit)
+    </a> 
+    |
+    <a href="{% url 'core:code_delete' p.id %}">
+        (delete)
+    </a>
+    {% endif %}
+
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+
+<h2>Bathroom Door Codes</h2>
+
+<div class="card-container">
+    {% for p in profile_user.code_set.all %}
+    {% if p.code_type.id == 1 %}
+    <div class="card">
 
     {{ p.value }}
     <hr>
@@ -62,16 +59,37 @@
     <a href="{% url 'core:code_delete' p.id %}">
         (delete)
     </a>
-    {% else %}
-    <p>Submitted by <a href="{% url 'core:user_detail' p.owner.id %}">{{ p.owner.username }}</a></p>
     {% endif %}
 
     </div>
     {% endif %}
     {% endfor %}
 </div>
-</ul>
-{% endif %}
-<a href="{% url 'core:code_add' place.id %}">Submit a new password</a> | 
-<a href="{% url 'core:index' %}">Back</a>
+
+<h2>Comments</h2>
+
+<div class="card-container">
+    {% for p in profile_user.comment_set.all %}
+
+    <div class="card">
+        <a href="{% url 'core:code_detail' p.code_id %}">
+            {{ p.text }}
+        </a>
+    
+    {% if user.is_authenticated and user.id == p.owner.id %}
+    <hr>
+    <a href="{% url 'core:code_update' p.id %}">
+        (edit)
+    </a> 
+    |
+    <a href="{% url 'core:code_delete' p.id %}">
+        (delete)
+    </a>
+    {% endif %}
+
+    </div>
+    {% endfor %}
+</div>
+
+
 {% endblock %}

@@ -7,6 +7,9 @@ urlpatterns = [
     path("", views.PlaceIndexView.as_view(), name="index"),
     path("about/", TemplateView.as_view(template_name="core/about.html"), name="about"),
 
+    #User Detail
+    path("user/<int:pk>/", views.UserDetailView.as_view(), name="user_detail"),
+
     #Place CRUD
     path("place/<int:pk>/", views.PlaceDetailView.as_view(), name="place_detail"),
     path("place/add", views.PlaceCreateView.as_view(), name="place_add"),

@@ -11,24 +11,53 @@
 </head>
 <body>
     <header>
-        {% if user.is_authenticated %}
-            <p>Hi {{ user.username }}! 
-                <form action="{% url 'account_logout' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.path }}">
-                    <button type="submit">Log Out</button>
-                </form>
-            </p>
-        {% else %}
-        <p>Not Logged In
-            <a href="{% url 'account_login' %}?next={{ request.path }}">(Login)</a>
-        </p>
-        {% endif %}
+        <h1>Poop 'n Peruse (💩➕🧑‍💻)</h1>
+        <p id="tagline">for when you gotta go or you gotta know</p>
+
+
     </header>
-</hr>
+    <nav>
+        <div class="left-links">
+                <a href="{% url 'core:index' %}">
+                    Home
+                </a>
+
+
+
+                <a href="{% url 'core:about' %}">
+                    About
+                </a>
+            </div>
+            <div class="right-links">
+            {% if user.is_authenticated %}
+
+                <a href="{% url 'core:user_detail' user.id %}">{{ user.username }}</a>
+
+
+                    <form action="{% url 'account_logout' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <button type="submit">Log Out</button>
+                    </form>
+
+            {% else %}
+
+                <a href="{% url 'account_login' %}?next={{ request.path }}">(Login)</a>
+
+            {% endif %}
+            </div>
+    </nav>
+
+<main>
     {% block content %}
 
 
     {% endblock %}
+</main>
+<footer>
+    <div id="credits">
+        <p>Created by Chris Jones and Krista O'Connell</p>
+    </div>
+</footer>
 </body>
 </html>

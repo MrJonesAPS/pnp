@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 from .models import Place, Code, Comment
+from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 from core.owner import OwnerCreateView, OwnerDeleteView, OwnerDetailView, OwnerListView, OwnerDeleteView, OwnerUpdateView
 
@@ -8,6 +9,20 @@ from core.owner import OwnerCreateView, OwnerDeleteView, OwnerDetailView, OwnerL
 # Create your views here.
 def home(request):
     return render(request, "core/home.html", {})
+
+
+#######
+# User Detail
+#######
+class UserDetailView(generic.DetailView):
+    model = User
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Change the name of the user context variable here
+        context['profile_user'] = context.pop('user')
+        return context
+
 
 #######
 # Places

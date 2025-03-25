@@ -1,36 +1,96 @@
 body {
-    margin: 4vw;
+
     background-color: lemonchiffon;
 }
 main {
     padding: 4vw;
-    border: 1px dotted #777;
 }
-h1, footer {
+h1, h2{
     text-align: center;
 }
 footer {
-    margin-top: 1vw;
+    text-align: center;
+    display: grid;
+    grid: 'credits gap validation' 1fr
+            /1fr   3fr 1fr;
 }
-a, a:visited {
+#htmlcss{
+    grid-area: validation;
+    color:white;
+    font-size:small;
+}
+footer {
+    margin-top: 1vw;
+    background-color: #333;
+    color:white;
+}
+a {
     text-decoration: none;
     font-weight: bold;
     color: #C92; 
 }
-main {
-  display: grid;
-  grid-template-columns: 48vw 48vw;
-  grid-template-rows: auto;
+
+nav {
+    margin: 2vh;
+    background-color: #333;
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out the elements */
+    align-items: center; /* Align vertically in the middle */
 }
 
-a.button {
-    padding: 1px 6px;
-    border: 1px outset buttonborder;
-    border-radius: 3px;
-    color: buttontext;
-    background-color: buttonface;
+nav a {
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
     text-decoration: none;
 }
+
+.right-links {
+    display: flex; /* Align items inside the right-button div */
+    align-items: center; /* Vertically align 'chris' and the button */
+}
+.left-links {
+    display: flex; /* Align items inside the right-button div */
+}
+
+nav button {
+    display: block;
+    padding: 10px;
+}
+
+header h1{
+    margin:0%;
+}
+header #tagline{
+    text-align: center;
+    font-size:small;
+    font-style: italic;
+    margin:0%;
+}
+
+
 li {
     padding: 10px;
+}
+.card-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+}
+.card{
+    width: 20vw;
+    min-width: 200px;
+    background-color: #ccc;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+}
+.comment-card{
+    width: 100%;
+    background-color: #ccc;
+    text-align: left;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 20px;
 }
