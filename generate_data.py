@@ -4,7 +4,7 @@ import django
 django.setup()
 
 from faker import Faker
-from core.models import Place, CodeType, Code, Comment
+from core.models import Place, CodeType, Code, Comment, Vote
 from django.contrib.auth.models import User
 import random
 from model_bakery.recipe import Recipe
@@ -48,7 +48,7 @@ wifi_type.save()
 
 
 # Create some bathroom door lock codes
-for _ in range(200):  
+for _ in range(50):  
     code_type_id = 1
     place = random.choice(Place.objects.all())
     owner = random.choice(User.objects.all())
@@ -62,7 +62,7 @@ for _ in range(200):
 
 
 # Create some wifi passwords
-for _ in range(200):  
+for _ in range(50):  
     code_type_id = 2
     place = random.choice(Place.objects.all())
     owner = random.choice(User.objects.all())
@@ -75,10 +75,22 @@ for _ in range(200):
     code.save()
 
 
+# Create some Votes - TODO: make this unique
+for _ in range(200):
+    code = random.choice(Code.objects.all())
+    user = random.choice(User.objects.all())
+    worked = random.choice([True, False])
+    vote = Vote(
+        user = user,
+        code = code,
+        worked = worked
+    )
+    vote.save()
+
 
 
 # Create some Comments
-for _ in range(400):  # Create 200 comments
+for _ in range(50): 
     code = random.choice(Code.objects.all())
     owner = random.choice(User.objects.all())
     comment = Comment(

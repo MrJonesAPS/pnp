@@ -26,13 +26,20 @@ class Code(models.Model):
     value = models.CharField(max_length=255)
     code_type = models.ForeignKey(CodeType, on_delete=models.RESTRICT)
     place = models.ForeignKey(Place, on_delete=models.RESTRICT)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owner')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Vote')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.value
 
+class Vote(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    code = models.ForeignKey(Code, on_delete=models.CASCADE)
+    worked = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Comment(models.Model):
     text = models.TextField()

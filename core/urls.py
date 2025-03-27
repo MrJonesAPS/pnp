@@ -49,5 +49,15 @@ urlpatterns = [
     path(
         "comment/delete/<int:pk>/", views.CommentDeleteView.as_view(), name="comment_delete"
     ),
+
+
+    #Vote for a code - these two function views only accept post requests
+    path(
+        "code/<int:pk>/worked", views.WorkedView.as_view(), name="code_worked"
+    ),
+    path(
+        "code/<int:pk>/notworked", views.NotWorkedView.as_view(), name="code_notworked"
+    ),
+
     
 ]

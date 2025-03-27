@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
-from .models import Place, Code, Comment
+from .models import Place, Code, Comment, Vote
 from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 from core.owner import OwnerCreateView, OwnerDeleteView, OwnerDetailView, OwnerListView, OwnerDeleteView, OwnerUpdateView
@@ -55,6 +55,12 @@ class PlaceDeleteView(OwnerDeleteView):
 class CodeDetailView(generic.DetailView):
     model = Code
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        this_code = context["code"]
+        context["num_yes_votes"] = Vote.objects.filter(code=this_code).filter(worked=True).count()
+        context["num_no_votes"] = Vote.objects.filter(code=this_code).filter(worked=False).count()
+        return context
 
 class CodeAddView(OwnerCreateView):
     model = Code
@@ -82,6 +88,35 @@ class CodeDeleteView(OwnerDeleteView):
     def get_success_url(self):
         return reverse_lazy("core:place_detail", kwargs={"pk": self.object.place.id})
 
+
+########
+# Votes
+########
+class WorkedView(OwnerCreateView):
+    model = Vote
+    fields = []
+    template_name = 'core/code_worked.html'
+
+    def get_success_url(self):
+        return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
+
+    def form_valid(self, form):
+        form.instance.code_id = self.kwargs.get('pk')
+        form.instance.worked=True
+        return super(WorkedView, self).form_valid(form)
+
+class NotWorkedView(OwnerCreateView):
+    model = Vote
+    fields = []
+    template_name = 'core/code_not.html'
+
+    def get_success_url(self):
+        return reverse_lazy("core:code_detail", kwargs={"pk": self.object.code.id})
+
+    def form_valid(self, form):
+        form.instance.code_id = self.kwargs.get('pk')
+        form.instance.worked=False
+        return super(NotWorkedView, self).form_valid(form)
 
 ########
 # Comments

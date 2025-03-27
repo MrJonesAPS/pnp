@@ -7,7 +7,12 @@
 <h2>{{ code.code_type.name}} for <a href="{% url 'core:place_detail' code.place.id %}">{{code.place.name}}</a></h2>
 <h2>{{ code.comment_set.all|length}} comment{{ code.comment_set.all|pluralize }}</h2>
 
+<h3>{{ code.vote_set.all | length}} votes: {{ num_yes_votes }} worked, {{ num_no_votes }} didn't work.</h3>
 
+
+<h3>Did this code work for you? 
+        (<a href="{% url 'core:code_worked' code.id %}">Yes</a> / <a href="{% url 'core:code_notworked' code.id %}">No</a>)
+</h3>
 
 <div class="card-container">
     {% for c in code.comment_set.all %}
